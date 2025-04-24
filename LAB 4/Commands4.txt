@@ -1,0 +1,77 @@
+sudo apt install python3-pip
+pip3 install python-dateutil
+
+sudo apt update
+sudo apt install python3-pip
+pip3 install python-dateutil
+
+
+python3 -c "import dateutil; print(dateutil.__version__)"
+
+mkdir berkeley-sync
+cd berkeley-sync
+touch master.py
+touch slave.py
+
+python3 master.py
+python3 slave.py
+
+
+master1 and slave1 
+python3 slave.py
+# Enter port: 8001
+# Offset: 3
+
+python3 slave.py
+# Port: 8002
+# Offset: -1
+
+python3 slave.py
+# Port: 8003
+# Offset: 6 (an outlier)
+
+python3 master.py
+
+🔁 Process Recap:
+Step	Who	Command
+1	Terminal 1	python3 slave.py → port 8001, offset 3
+2	Terminal 2	python3 slave.py → port 8002, offset -2
+3	Terminal 3	python3 slave.py → port 8003, offset 5
+4	Terminal 4	python3 master.py
+
+OPTIONAL
+sudo lsof -i :8001
+# find the PID and kill it
+kill -9 <PID>
+
+Verify Port Availability:
+sudo lsof -i :8080
+
+Check Firewall Settings:
+telnet 127.0.0.1 8080
+
+Check if the Slave Client is Listening: 
+netstat -tuln | grep 8080
+
+Update the Slave Code for Better Logging
+slave_client = socket.socket()
+try:
+    slave_client.connect(('127.0.0.1', 8080))
+    print("Connected to the master server successfully!")
+except ConnectionRefusedError as e:
+    print(f"Error: {e}")
+
+
+
+🔍 Step 1: Find the process using port 8080
+Run:
+sudo lsof -i :8080
+
+You’ll see output like:
+python3  12345  username  ...  TCP *:http-alt (LISTEN)
+
+🛑 Step 2: Kill the process
+Use the PID (e.g., 12345) to stop it:
+kill -9 12345
+
+
