@@ -1,0 +1,7 @@
+Terminal1-
+javac *.java
+rmiregistry
+
+Terminal2- java FactorialServer
+
+Terminal3- java FactorialClient
