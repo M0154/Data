@@ -1,0 +1,12 @@
+{
+  "name": "web_service",
+  "version": "1.0.0",
+  "description": "Simple web service for distributed app",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
