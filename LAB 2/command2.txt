@@ -1,0 +1,22 @@
+idlj -fall Reverse.idl
+
+javac ReverseModule/*.java ReverseImpl.java ReverseServer.java ReverseClient.java
+
+java ReverseServer -ORBInitialPort 1050 -ORBInitialHost localhost
+
+java ReverseClient -ORBInitialPort 1050 -ORBInitialHost localhost
+
+
+
+
+5. Check for Firewall or Security Software
+
+Firewalls or security settings on your machine might be blocking the connection on port 1050. Try disabling the firewall temporarily to test if that is the issue.
+
+To check if the firewall is enabled on Ubuntu, run:
+
+sudo ufw status
+
+If the firewall is enabled and blocking the port, you can disable it temporarily with:
+
+sudo ufw disable
