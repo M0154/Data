@@ -1,0 +1,119 @@
+✅ PART 1: Install OpenMPI on Ubuntu/WSL
+1️⃣ Update and install required dependencies
+sudo apt update
+sudo apt install build-essential gcc g++ gfortran -y
+
+2️⃣ Download OpenMPI source code
+mkdir ~/openmpi-install
+cd ~/openmpi-install
+wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.4.tar.bz2
+
+
+3️⃣ Extract the tarball
+tar -xjf openmpi-4.1.4.tar.bz2
+cd openmpi-4.1.4
+
+4️⃣ Configure, Compile, and Install
+./configure --prefix=$HOME/opt/openmpi
+make -j4        # use all your cores
+make install
+
+
+5️⃣ Update PATH and LD_LIBRARY_PATH
+echo "export PATH=\$PATH:\$HOME/opt/openmpi/bin" >> ~/.bashrc
+echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:\$HOME/opt/openmpi/lib" >> ~/.bashrc
+source ~/.bashrc
+
+6️⃣ Check if mpicc and mpirun work
+mpicc --version
+which mpirun
+
+
+✅ PART 2: Write the MPI Program (Sum of N array elements)
+1️⃣ Create a new C file
+cd ~
+mkdir mpi-sum
+cd mpi-sum
+nano sum_mpi.c
+ctrl+s
+ctrl+x
+
+
+🔽 Paste this code in sum_mpi.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <mpi.h>
+
+int main(int argc, char* argv[]) {
+    int rank, size, N;
+    int *data = NULL, *sub_data;
+    int local_sum = 0, total_sum = 0;
+
+    MPI_Init(&argc, &argv);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+    if (rank == 0) {
+        printf("Enter number of elements (N): ");
+        scanf("%d", &N);
+        if (N % size != 0) {
+            printf("N must be divisible by number of processes.\n");
+            MPI_Abort(MPI_COMM_WORLD, 1);
+        }
+        data = (int*)malloc(N * sizeof(int));
+        printf("Enter %d elements:\n", N);
+        for (int i = 0; i < N; i++)
+            scanf("%d", &data[i]);
+    }
+
+    MPI_Bcast(&N, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    int chunk_size = N / size;
+    sub_data = (int*)malloc(chunk_size * sizeof(int));
+
+    MPI_Scatter(data, chunk_size, MPI_INT, sub_data, chunk_size, MPI_INT, 0, MPI_COMM_WORLD);
+
+    for (int i = 0; i < chunk_size; i++)
+        local_sum += sub_data[i];
+
+    printf("Local sum at rank %d = %d\n", rank, local_sum);
+
+    MPI_Reduce(&local_sum, &total_sum, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
+
+    if (rank == 0)
+        printf("Final sum = %d\n", total_sum);
+
+    if (data) free(data);
+    free(sub_data);
+    MPI_Finalize();
+    return 0;
+}
+
+
+
+✅ PART 3: Compile and Run the MPI Program
+1️⃣ Compile with mpicc
+mpicc sum_mpi.c -o sum_mpi
+
+
+2️⃣ Run with 4 processors (for example)
+mpirun -np 4 ./sum_mpi
+🧠 When prompted:
+Enter 20 for N
+Then enter 20 numbers (e.g. 1 2 3 ... 20)
+✅ It will show local sums for each processor and the final total sum.
+
+✅ Example Output
+Enter number of elements (N): 20
+Enter 20 elements:
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20
+Local sum at rank 0 = 15
+Local sum at rank 1 = 40
+Local sum at rank 2 = 65
+Local sum at rank 3 = 90
+Final sum = 210
+
+
+✅ OPTIONAL: Clean up (after testing)
+cd ~
+rm -rf openmpi-install
+rm -rf mpi-sum
