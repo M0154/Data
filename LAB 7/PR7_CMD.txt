@@ -1,0 +1,69 @@
+1)Download Apache Tomcat
+Go to Tomcat 9 official download page
+
+Scroll down to Binary Distributions → Core → Click .zip link.
+
+Set the CATALINA_HOME Environment Variable
+Under System variables → Click New:
+
+
+Field	Value
+Variable name	CATALINA_HOME
+Variable value	C:\apache-tomcat-9.0.xx (your Tomcat folder path)
+
+cd C:\apache-tomcat-9.0.xx\bin
+     startup.bat
+
+Tomcat started.
+
+Verify Tomcat in Browser
+http://localhost:8080/
+
+
+
+
+Steps:-
+1)
+1.1 create this folder structure on desktop
+CalculatorWSApplication/
+ ├── WEB-INF/
+ │    ├── web.xml (optional)
+ │    ├── classes/
+ │         └── com/
+ │              └── calc/
+ │                   └── ArithmeticOperations.class (we will compile it here) 
+ ├── index.html
+
+1.2 create ArithmeticOperations.java and CalculatorWSClient.java on desktop
+
+2) Compile the Servlet
+
+2.1 javac -d . ArithmeticOperations.java   -if not work then use another cmd
+                                    or
+2.1 javac -d . -cp "C:\apache-tomcat-9.0.104\lib\servlet-api.jar" ArithmeticOperations.java
+
+2.2 It will create the com/calc/ArithmeticOperations.class file. --------com/calc - this folder is created on desktop
+    
+2.3 Move the compiled .class file to:
+
+ CalculatorWSApplication/WEB-INF/classes/com/calc/
+
+2.4 Deploy the Web Application on Tomcat
+Copy the whole CalculatorWSApplication folder into Tomcat’s webapps folder. Example:
+
+C:\apache-tomcat-9.0.xx\webapps\CalculatorWSApplication\
+
+2.5 Start Tomcat server:
+    2.5.1 cd C:\apache-tomcat-9.0.xx\bin
+    2.5.2startup.bat
+
+2.6 Open a browser and visit:
+
+http://localhost:8080/CalculatorWSApplication/index.html     ---------You should see your Arithmetic Operations HTML form!
+
+3) Run the Distributed Client (CalculatorWSClient.java)
+  3.1 Compile CalculatorWSClient.java separately:
+      3.1.1javac CalculatorWSClient.java
+
+   3.2 Run it:
+      3.2.1java CalculatorWSClient

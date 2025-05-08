@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Arithmetic Web Service</title>
+</head>
+<body>
+  <h2>Arithmetic Operations</h2>
+
+  <label>Enter Number 1:</label>
+  <input type="number" id="num1"><br><br>
+
+  <label>Enter Number 2:</label>
+  <input type="number" id="num2"><br><br>
+
+  <button onclick="callAPI('add')">Add</button>
+  <button onclick="callAPI('subtract')">Subtract</button>
+  <button onclick="callAPI('multiply')">Multiply</button>
+  <button onclick="callAPI('divide')">Divide</button>
+
+  <h3>Result: <span id="result">---</span></h3>
+
+  <script>
+    function callAPI(operation) {
+      const a = document.getElementById('num1').value;
+      const b = document.getElementById('num2').value;
+
+      fetch(`http://127.0.0.1:5000/${operation}?a=${a}&b=${b}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.result !== undefined) {
+            document.getElementById('result').innerText = data.result;
+          } else {
+            document.getElementById('result').innerText = data.error;
+          }
+        })
+        .catch(err => {
+          document.getElementById('result').innerText = "Error contacting server.";
+        });
+    }
+  </script>
+</body>
+</html>
