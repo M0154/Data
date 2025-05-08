@@ -1,0 +1,8 @@
+module ReverseModule {
+    interface Reverse {
+        string reverse_string(in string str);
+        string to_upper(in string str);
+        string to_lower(in string str);
+        string capitalize(in string str); // Optional extra feature
+    };
+};
