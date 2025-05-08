@@ -1,0 +1,121 @@
+Prac 1
+T1
+javac *.java
+rmiregistry 
+
+T 2
+java Server(file. Name)
+
+T 3
+java Client(file name)
+
+
+
+Prac 2
+T 1
+idlj -fall Reverse.idl
+javac ReverseModule/*.java ReverseImpl.java ReverseServer.java ReverseClient.java
+tnameserv -ORBInitialPort 1050
+
+T 2
+java ReverseServer -ORBInitialPort 1050 -ORBInitialHost localhost
+
+T3
+java ReverseClient -ORBInitialPort 1050 -ORBInitialHost localhost
+
+
+
+
+Practical 3
+Command from chatgpt till command no 7 from step 3 
+# Step 1: Create and go to LP5 folder
+mkdir ~/LP5
+cd ~/LP5
+
+# Step 2: Download OpenMPI 4.1.4
+wget https://download.open-mpi.org/release/open-mpi/v4.1/openmpi-4.1.4.tar.bz2
+(optional)
+sudo apt update
+sudo apt install openmpi-bin libopenmpi-dev
+
+
+# Step 3: Update and install gcc if not already installed
+sudo apt-get update
+sudo apt-get install gcc g++ gfortran make
+
+# Step 4: Extract OpenMPI
+tar -jxf openmpi-4.1.4.tar.bz2
+cd openmpi-4.1.4
+
+# Step 5: Configure, compile, and install OpenMPI in user's home directory
+./configure --prefix=$HOME/opt/openmpi
+make -j$(nproc)
+make install
+
+# Step 6: Update environment variables (PATH and LD_LIBRARY_PATH)
+echo "export PATH=\$PATH:\$HOME/opt/openmpi/bin" >> ~/.bashrc
+echo "export LD_LIBRARY_PATH=\$LD_LIBRARY_PATH:\$HOME/opt/openmpi/lib" >> ~/.bashrc
+source ~/.bashrc
+
+# (Optional) Step 7: Delete LP5 folder
+cd ~
+rm -rf ~/LP5
+
+Next
+nano mpi.c
+Copy code from mpi.c and paste in terminal
+Ctrlx
+mpicc mpi.c -0 mpi
+mpirun -np 4 ./mpi
+
+
+
+Practical 4
+sudo apt install python 
+pip install python-dateutil
+T1
+python3 server.py
+T2
+python3 client.py 
+
+
+
+Practical 5
+javac *.java
+java Bully
+
+javac *.java
+java Ring 
+
+
+
+Practical 6
+javac *.java
+java TRing
+
+
+practical 7
+sudo apt install python3-pip
+sudo apt install python3.12-venv
+python3 -m venv venv
+source venv/bin/activate
+pip install flask-cors
+pip install flask
+python filename.py
+
+run this in browser now : http://127.0.0.1:5000/add?a=8&b=9
+
+
+
+
+1. Implement multi-threaded client/server Process communication using RMI.
+2. Develop any distributed application using CORBA to demonstrate object brokering.
+(Calculator or String operations).
+3. Develop a distributed system, to find sum of N elements in an array by distributing N/n elements to n
+number of processors MPI or OpenMP. Demonstrate by displaying the intermediate sums calculated
+at different processors.
+4. Implement Berkeley algorithm for clock synchronization.
+5. Implement token ring based mutual exclusion algorithm.
+6. Implement Bully and Ring algorithm for leader election.
+7. Create a simple web service and write any distributed application to consume the web service.
+8. Mini Project (In group): A Distributed Application for Interactive Multiplayer Games
